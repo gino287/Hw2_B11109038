@@ -1,5 +1,7 @@
 package com.example.hw2application
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -46,6 +48,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.content.Context
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -279,6 +283,7 @@ val attractions = listOf(
 @Composable
 fun DetailPageScreen(attractionId: Int, navController: NavController) {
     val attraction = loadAttractionDetails(attractionId)
+    val context = LocalContext.current
 
     Column(modifier = Modifier.fillMaxSize()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -307,14 +312,19 @@ fun DetailPageScreen(attractionId: Int, navController: NavController) {
         Text(
             text = attraction.detailedDescription,
             style = MaterialTheme.typography.bodyMedium,
-            fontSize = 24.sp,
+            fontSize = 20.sp,
             lineHeight = 30.sp,
             modifier = Modifier
                 .padding(20.dp)
                 .fillMaxWidth()
         )
         Button(
-            onClick = { /* 点击事件，用于其他功能 */ },
+            onClick = {
+                val gmmIntentUri = Uri.parse("geo:23.8522973,120.8794834")
+                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                mapIntent.setPackage("com.google.android.apps.maps")
+                context.startActivity(mapIntent)
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -345,3 +355,4 @@ fun GreetingPreview() {
         //DetailPageScreen(navController)
     }
 }
+
